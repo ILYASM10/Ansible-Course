@@ -1,0 +1,11 @@
+---
+- name: Playbook pour créer un dossier dans /home/ilyasbainam10
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Créer un dossier dans /home/ilyasbainam10
+      file:
+        path: /home/ilyasbainam10/mon_nouveau_dossier
+        state: directory
+        mode: '0755'
