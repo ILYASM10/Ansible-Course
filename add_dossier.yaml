@@ -10,6 +10,6 @@
   tasks:
     - name: Créer un dossier dans /home/bainailyas
       file:
-        path: /home/ilyasbainam10/mon_nouveau_dossier
+        path: /home/bainailyas/mon_nouveau_dossier
         state: directory
         mode: '0755'
