@@ -3,38 +3,13 @@
   hosts: all
   become: yes
   become_method: sudo
-  become_user: bainailyas
+  become_user: bainailyas  # Utilisateur sous lequel les commandes seront exécutées après élévation
   vars:
-    ansible_become_pass: "Btissam1970$"
+    ansible_become_pass: "Btissam1970$"  # Mot de passe sudo
   tasks:
-    - name: Créer un nouvel utilisateur
-      user:
-        name: newuser           # Nom de l'utilisateur à créer
-        comment: "Nouvel Utilisateur"  # Commentaire associé à l'utilisateur
-        shell: /bin/bash        # Shell par défaut de l'utilisateur
-        create_home: yes        # Crée un répertoire personnel pour l'utilisateur
-        state: present          # Assure que l'utilisateur est présent
-      # Ajoutez un "register" pour vérifier la sortie de cette tâche si nécessaire
-      register: create_user_result
-
-    - name: Définir le mot de passe de l'utilisateur
+    - name: Créer un nouvel utilisateur avec mot de passe
       user:
         name: newuser
-        password: "{{ 'password123' | password_hash('sha512') }}"  # Remplacez par le mot de passe souhaité
-      # Ajoutez un "register" pour vérifier la sortie de cette tâche si nécessaire
-      register: set_password_result
-
-    - name: Ajouter l'utilisateur au groupe sudo
-      user:
-        name: newuser
-        groups: sudo
-        append: yes  # Ajoute l'utilisateur aux groupes sans enlever les groupes existants
-      # Ajoutez un "register" pour vérifier la sortie de cette tâche si nécessaire
-      register: add_to_sudo_group_result
-
-    - name: Afficher les résultats
-      debug:
-        msg: |
-          Création de l'utilisateur : {{ create_user_result }}
-          Définition du mot de passe : {{ set_password_result }}
-          Ajout au groupe sudo : {{ add_to_sudo_group_result }}
+        state: present
+        shell: /bin/bash
+        password: "Btissam1970$"  # Remplacez ceci par le mot de passe crypté
