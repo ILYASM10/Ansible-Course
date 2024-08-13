@@ -2,6 +2,10 @@
 - name: Playbook pour créer un dossier dans /home/ilyasbainam10
   hosts: all
   become: yes
+  become_method: sudo
+  become_user: bainailyas
+  vars:
+    ansible_become_pass: "Btissam1970$"
 
   tasks:
     - name: Créer un dossier dans /home/ilyasbainam10
