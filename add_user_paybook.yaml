@@ -1,7 +1,11 @@
 ---
 - name: Ajouter un utilisateur sur Ubuntu
   hosts: all
-  become: yes  # Utilise sudo pour exécuter les tâches avec les droits d'administrateur
+  become: yes
+  become_method: sudo
+  become_user: bainailyas
+  vars:
+    ansible_become_pass: "Btissam1970$"
   tasks:
     - name: Créer un nouvel utilisateur
       user:
