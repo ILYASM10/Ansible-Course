@@ -14,14 +14,27 @@
         shell: /bin/bash        # Shell par défaut de l'utilisateur
         create_home: yes        # Crée un répertoire personnel pour l'utilisateur
         state: present          # Assure que l'utilisateur est présent
+      # Ajoutez un "register" pour vérifier la sortie de cette tâche si nécessaire
+      register: create_user_result
 
     - name: Définir le mot de passe de l'utilisateur
       user:
         name: newuser
         password: "{{ 'password123' | password_hash('sha512') }}"  # Remplacez par le mot de passe souhaité
+      # Ajoutez un "register" pour vérifier la sortie de cette tâche si nécessaire
+      register: set_password_result
 
     - name: Ajouter l'utilisateur au groupe sudo
       user:
         name: newuser
         groups: sudo
         append: yes  # Ajoute l'utilisateur aux groupes sans enlever les groupes existants
+      # Ajoutez un "register" pour vérifier la sortie de cette tâche si nécessaire
+      register: add_to_sudo_group_result
+
+    - name: Afficher les résultats
+      debug:
+        msg: |
+          Création de l'utilisateur : {{ create_user_result }}
+          Définition du mot de passe : {{ set_password_result }}
+          Ajout au groupe sudo : {{ add_to_sudo_group_result }}
