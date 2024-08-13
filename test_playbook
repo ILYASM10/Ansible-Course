@@ -1,0 +1,7 @@
+---
+- name: Display a message on the target machine
+  hosts: all
+  tasks:
+    - name: Display message in the terminal
+      debug:
+        msg: "Hello from Ansible! This is a test playbook."
