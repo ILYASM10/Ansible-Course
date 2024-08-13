@@ -1,5 +1,5 @@
 ---
-- name: Playbook pour créer un dossier dans /home/ilyasbainam10
+- name: Playbook pour créer un dossier dans /home/bainailyas
   hosts: all
   become: yes
   become_method: sudo
@@ -8,7 +8,7 @@
     ansible_become_pass: "Btissam1970$"
 
   tasks:
-    - name: Créer un dossier dans /home/ilyasbainam10
+    - name: Créer un dossier dans /home/bainailyas
       file:
         path: /home/ilyasbainam10/mon_nouveau_dossier
         state: directory
