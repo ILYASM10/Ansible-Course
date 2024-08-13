@@ -1,0 +1,23 @@
+---
+- name: Ajouter un utilisateur sur Ubuntu
+  hosts: Ubuntu_Test
+  become: yes  # Utilise sudo pour exécuter les tâches avec les droits d'administrateur
+  tasks:
+    - name: Créer un nouvel utilisateur
+      user:
+        name: newuser           # Nom de l'utilisateur à créer
+        comment: "Nouvel Utilisateur"  # Commentaire associé à l'utilisateur
+        shell: /bin/bash        # Shell par défaut de l'utilisateur
+        create_home: yes        # Crée un répertoire personnel pour l'utilisateur
+        state: present          # Assure que l'utilisateur est présent
+
+    - name: Définir le mot de passe de l'utilisateur
+      user:
+        name: newuser
+        password: "{{ 'password123' | password_hash('sha512') }}"  # Remplacez par le mot de passe souhaité
+
+    - name: Ajouter l'utilisateur au groupe sudo
+      user:
+        name: newuser
+        groups: sudo
+        append: yes  # Ajoute l'utilisateur aux groupes sans enlever les groupes existants
