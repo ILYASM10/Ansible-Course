@@ -1,0 +1,21 @@
+---
+- name: Test Playbook
+  hosts: all
+  become: yes
+  tasks:
+    - name: Test connectivity
+      ping:
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+      notify: 
+        - Start nginx
+
+  handlers:
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
