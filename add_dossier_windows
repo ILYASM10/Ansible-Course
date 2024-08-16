@@ -1,0 +1,10 @@
+---
+- name: Playbook pour créer un dossier sur Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+    - name: Créer un dossier dans C:\Users\bainailyas
+      win_file:
+        path: C:\Users\bainailyas\mon_nouveau_dossier
+        state: directory
+        recurse: yes
