@@ -1,6 +1,6 @@
 ---
 - name: Playbook pour créer un dossier sur Windows
-  hosts: windows
+  hosts: all
   gather_facts: no
   tasks:
     - name: Créer un dossier dans C:\Users\bainailyas
