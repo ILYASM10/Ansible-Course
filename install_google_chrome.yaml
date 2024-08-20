@@ -1,5 +1,5 @@
 - name: Install Google Chrome on Windows
-  hosts: windows
+  hosts: all
   tasks:
     - name: Ensure the Temp directory exists
       ansible.windows.win_file:
