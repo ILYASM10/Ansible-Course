@@ -1,6 +1,6 @@
 ---
 - name: Install Google Chrome on Windows and create a desktop shortcut
-  hosts: windows
+  hosts: all
   tasks:
     - name: Download Google Chrome Installer
       ansible.windows.win_get_url:
