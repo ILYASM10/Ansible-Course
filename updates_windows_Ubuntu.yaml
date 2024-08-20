@@ -26,8 +26,8 @@
     - name: Mises à jour sur Windows
       block:
         - name: Assurer les mises à jour Windows
-          ansible.windows.win_updates:
-            category_names: "{{ update_categories }}"
+          win_updates:
+            category_names: "{{ update_categories | default([]) }}"
             reboot: true
             log_path: C:\Windows\Temp\update_log.txt
 
@@ -35,8 +35,5 @@
           win_copy:
             content: "Ceci est un fichier de log de test."
             dest: C:\Windows\Temp\update_log.txt
-
-        - name: Vérifier l'état des mises à jour sur Windows
-          ansible.windows.win_updates_facts:
 
       when: ansible_facts['os_family'] == "Windows"
