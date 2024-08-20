@@ -1,13 +1,12 @@
----
-- name: Install Google Chrome on Windows and create a desktop shortcut
-  hosts: all
+- name: Install Google Chrome on Windows
+  hosts: windows
   tasks:
-    - name: Ensure Temp directory exists
+    - name: Ensure the Temp directory exists
       ansible.windows.win_file:
         path: C:\Temp
         state: directory
 
-    - name: Download Google Chrome Installer
+    - name: Download Google Chrome installer
       ansible.windows.win_get_url:
         url: https://dl.google.com/chrome/install/latest/chrome_installer.exe
         dest: C:\Temp\chrome_installer.exe
@@ -15,20 +14,16 @@
     - name: Install Google Chrome
       ansible.windows.win_command:
         cmd: C:\Temp\chrome_installer.exe /silent /install
-      become: yes
+        # No become is needed here
+      args:
+        chdir: C:\Temp
 
-    - name: Ensure Google Chrome is installed
-      ansible.windows.win_stat:
-        path: C:\Program Files\Google\Chrome\Application\chrome.exe
-      register: chrome_installed
-
-    - name: Create shortcut for Google Chrome on Desktop
+    - name: Create a shortcut on the desktop
       ansible.windows.win_shell: |
-        if (Test-Path -Path "C:\Program Files\Google\Chrome\Application\chrome.exe") {
-          $shell = New-Object -ComObject WScript.Shell
-          $shortcut = $shell.CreateShortcut("$env:USERPROFILE\Desktop\Google Chrome.lnk")
-          $shortcut.TargetPath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-          $shortcut.IconLocation = "C:\Program Files\Google\Chrome\Application\chrome.exe, 0"
-          $shortcut.Save()
-        }
-      when: chrome_installed.stat.exists
+        $shortcut = "$env:USERPROFILE\Desktop\Google Chrome.lnk"
+        $targetPath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+        $wshShell = New-Object -ComObject WScript.Shell
+        $shortcutObj = $wshShell.CreateShortcut($shortcut)
+        $shortcutObj.TargetPath = $targetPath
+        $shortcutObj.Save()
+      # No become is needed here
