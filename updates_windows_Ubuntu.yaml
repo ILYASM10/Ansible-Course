@@ -1,24 +1,12 @@
-- name: Assurer les mises à jour sur les VMs Ubuntu et Windows
+---
+- name: Windows Rolling Update
   hosts: all
   tasks:
-
-    - name: Rassembler les faits sur les machines Linux
-      ansible.builtin.setup:
-      when: ansible_os_family != "Windows"
-
-    - name: Rassembler les faits sur les machines Windows
-      ansible.windows.win_feature_facts:
-      when: ansible_os_family == "Windows"
-
-    - name: Appliquer les mises à jour sur Ubuntu
-      apt:
-        update_cache: yes
-        upgrade: dist
-      become: yes
-      when: ansible_os_family != "Windows"
-
-    - name: Appliquer les mises à jour sur Windows
-      win_updates:
-        category_names: ['SecurityUpdates']
-        reboot: yes
-      when: ansible_os_family == "Windows"
+    - name: Install all critical and security updates
+      ansible.windows.win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+        state: installed
+        reboot: true
+        log_path: C:\ansible.txt
