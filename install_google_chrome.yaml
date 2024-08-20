@@ -2,6 +2,11 @@
 - name: Install Google Chrome on Windows and create a desktop shortcut
   hosts: all
   tasks:
+    - name: Ensure Temp directory exists
+      ansible.windows.win_file:
+        path: C:\Temp
+        state: directory
+
     - name: Download Google Chrome Installer
       ansible.windows.win_get_url:
         url: https://dl.google.com/chrome/install/latest/chrome_installer.exe
