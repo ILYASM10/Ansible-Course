@@ -1,39 +1,24 @@
----
 - name: Assurer les mises à jour sur les VMs Ubuntu et Windows
   hosts: all
-  become: yes
   tasks:
-    - name: Mises à jour sur Ubuntu
-      block:
-        - name: Mettre à jour la liste des paquets APT sur Ubuntu
-          apt:
-            update_cache: yes
 
-        - name: Mettre à jour tous les paquets sur Ubuntu
-          apt:
-            upgrade: dist
-            autoremove: yes
-            autoclean: yes
+    - name: Rassembler les faits sur les machines Linux
+      ansible.builtin.setup:
+      when: ansible_os_family != "Windows"
 
-        - name: Redémarrer Ubuntu si nécessaire
-          reboot:
-            msg: "Redémarrage après la mise à jour d'Ubuntu"
-            pre_reboot_delay: 5
-            test_command: whoami
+    - name: Rassembler les faits sur les machines Windows
+      ansible.windows.win_feature_facts:
+      when: ansible_os_family == "Windows"
 
-      when: ansible_facts['os_family'] == "Debian"
+    - name: Appliquer les mises à jour sur Ubuntu
+      apt:
+        update_cache: yes
+        upgrade: dist
+      become: yes
+      when: ansible_os_family != "Windows"
 
-    - name: Mises à jour sur Windows
-      block:
-        - name: Assurer les mises à jour Windows
-          win_updates:
-            category_names: "{{ update_categories | default([]) }}"
-            reboot: true
-            log_path: C:\Windows\Temp\update_log.txt
-
-        - name: Créer un fichier de log de test
-          win_copy:
-            content: "Ceci est un fichier de log de test."
-            dest: C:\Windows\Temp\update_log.txt
-
-      when: ansible_facts['os_family'] == "Windows"
+    - name: Appliquer les mises à jour sur Windows
+      win_updates:
+        category_names: ['SecurityUpdates']
+        reboot: yes
+      when: ansible_os_family == "Windows"
